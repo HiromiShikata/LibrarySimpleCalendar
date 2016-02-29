@@ -23,3 +23,29 @@ dependencies {
     testCompile 'junit:junit:4.12'
     compile 'com.android.support:appcompat-v7:23.2.0'
 }
+
+
+def repo = new File(rootDir, "repository/releases")
+def snapshotRepo = new File(rootDir, "repository/snapshots")
+
+apply plugin: 'maven'
+
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            repository url: "file://${repo.absolutePath}"
+            snapshotRepository url: "file://${snapshotRepo.absolutePath}"
+            pom.version = '0.0.1-SNAPSHOT'
+            pom.groupId = 'com.imorih'
+            pom.artifactId = 'simple-calendar'
+        }
+    }
+}
+task sourcesJar(type: Jar) {
+    from android.sourceSets.main.java.srcDirs
+    classifier = 'sources'
+}
+artifacts {
+    archives sourcesJar
+}
+
